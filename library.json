@@ -1,21 +1,26 @@
 {
-  "name": "esp32ModbusRTU",
-  "version": "0.0.2",
-  "keywords": "Arduino, ESP32, Modbus, RTU",
-  "description": "async Modbus-RTU client for ESP32",
-  "homepage": "https://github.com/bertmelis/esp32ModbusRTU",
+  "name": "esp-idf-modbus-rtu",
+  "version": "1.0.0",
+  "keywords": "ESP-IDF, ESP32, Modbus, RTU",
+  "description": "Asynchronous Modbus RTU client for ESP-IDF",
+  "homepage": "https://github.com/EqScript/esp-idf-modbus-rtu",
   "license": "MIT",
-  "authors": {
-    "name": "Bert Melis",
-    "url": "https://github.com/bertmelis",
-    "maintainer": true
-  },
+  "authors": [
+    {
+      "name": "Bert Melis",
+      "url": "https://github.com/bertmelis"
+    },
+    {
+      "name": "EqScript",
+      "url": "https://github.com/EqScript"
+    }
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bertmelis/esp32ModbusRTU.git",
+    "url": "https://github.com/EqScript/esp-idf-modbus-rtu.git",
     "branch": "master"
   },
-  "frameworks": "arduino",
+  "frameworks": "espidf",
   "platforms": [
     "espressif32"
   ]

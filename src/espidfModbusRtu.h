@@ -1,6 +1,6 @@
 /* esp32ModbusRTU
 
-Copyright 2018 Bert Melis
+Copyright (c) 2018-2025 Bert Melis, EqScript
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
@@ -22,10 +22,10 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef esp32ModbusRTU_h
-#define esp32ModbusRTU_h
+#ifndef ESPIDFMODBUSRTU_H
+#define ESPIDFMODBUSRTU_H
 
-#if defined ARDUINO_ARCH_ESP32
+// #if defined ARDUINO_ARCH_ESP32
 
 #ifndef QUEUE_SIZE
 #define QUEUE_SIZE 20
@@ -40,17 +40,17 @@ extern "C" {
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/queue.h>
+#include <driver/uart.h>
+#include <driver/gpio.h>
 }
-#include <HardwareSerial.h>
-#include <esp32-hal-gpio.h>
 
 #include "esp32ModbusTypeDefs.h"
 #include "ModbusMessage.h"
 
-class esp32ModbusRTU {
+class espidfModbusRtu {
  public:
-  explicit esp32ModbusRTU(HardwareSerial* serial, int8_t rtsPin = -1);
-  ~esp32ModbusRTU();
+  explicit espidfModbusRtu(uart_port_t uart_port = UART_NUM_2, int tx_pin = 17, int rx_pin = 16, int de_pin = -1, int re_pin = -1, uint32_t baud_rate = 115200, bool de_re_inverted = false);
+  ~espidfModbusRtu();
   void begin(int coreID = -1);
   bool readDiscreteInputs(uint8_t slaveAddress, uint16_t address, uint16_t numberCoils);
   bool readHoldingRegisters(uint8_t slaveAddress, uint16_t address, uint16_t numberRegisters);
@@ -63,27 +63,32 @@ class esp32ModbusRTU {
 
  private:
   bool _addToQueue(esp32ModbusRTUInternals::ModbusRequest* request);
-  static void _handleConnection(esp32ModbusRTU* instance);
+  static void _handleConnection(espidfModbusRtu* instance);
   void _send(uint8_t* data, uint8_t length);
   esp32ModbusRTUInternals::ModbusResponse* _receive(esp32ModbusRTUInternals::ModbusRequest* request);
 
  private:
-  uint32_t TimeOutValue;
-  HardwareSerial* _serial;
-  uint32_t _lastMillis;
-  uint32_t _interval;
-  int8_t _rtsPin;
-  TaskHandle_t _task;
-  QueueHandle_t _queue;
-  esp32Modbus::MBRTUOnData _onData;
-  esp32Modbus::MBRTUOnError _onError;
+  uint32_t m_timeOutValue;
+  uart_port_t m_uartPort;
+  int m_txPin;
+  int m_rxPin;
+  int m_dePin;
+  int m_rePin;
+  uint32_t m_baudRate;
+  bool m_deReInverted;
+  uint32_t m_lastMillis;
+  uint32_t m_interval;
+  TaskHandle_t m_task;
+  QueueHandle_t m_queue;
+  esp32Modbus::MBRTUOnData m_onData;
+  esp32Modbus::MBRTUOnError m_onError;
 };
 
-#endif
+// #endif
 
-#elif defined VITOWIFI_TEST
+// #elif defined VITOWIFI_TEST
 
-#else
+// #else
 
 #pragma message "no suitable platform"
 
